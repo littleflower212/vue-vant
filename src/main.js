@@ -6,6 +6,7 @@ import router from './router/'
 import Vant from 'vant'
 import {Toast} from 'vant'
 import './assets/style/reset.css'
+import './assets/style/common.scss'
 import 'vant/lib/index.css';
 import '@vant/touch-emulator' // 在桌面端touch适配
 import './rem'

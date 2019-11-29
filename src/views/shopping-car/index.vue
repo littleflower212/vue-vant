@@ -1,6 +1,6 @@
 <template>
     <div class="friends-container">
-        friends
+        shoppingcar
     </div>
 </template>
 

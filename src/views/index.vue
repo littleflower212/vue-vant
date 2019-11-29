@@ -53,15 +53,15 @@
             <p>优惠专区</p>
             <div class="on-sale-area">
                 <van-grid :border="false" :column-num="3">
-                    <van-grid-item v-for="n in 9" :key="n">
-                        <van-image height="70" :src="imgList[n%3]" />
-                        <p class="description">描述性文字</p>
+                    <van-grid-item v-for="(product, index) in saleProductsList" :key="index">
+                        <van-image height="70" :src="product.photoUrl" />
+                        <p class="description">{{product.name}}</p>
                         <div class="van-row--flex van-row--align-center">
-                            <div>
-                                <p class="van-card__price sale-price">¥5699.00</p>
-                                <p class="van-card__origin-price origin-price">¥7699.00</p>
+                            <div class="flex-column price-txt">
+                                <p class="van-card__price sale-price">¥{{product.price}}</p>
+                                <p class="van-card__origin-price origin-price">¥{{product.originPrice}}</p>
                             </div>
-                            <van-icon class="card-icon" @click="addToCart(imgList[n%3], $event)" name="cart-circle" />
+                            <van-icon class="card-icon" @click="addToCart(product, $event)" name="cart-circle" />
                         </div>
                         <transition appear
                                     @before-appear="beforeEnter"
@@ -85,6 +85,7 @@
 
 <script>
     import moveCartStore from '../store/moveCart'
+    import productService from '../service/product'
     export default {
         name: "index",
         data() {
@@ -94,6 +95,7 @@
                 searchForm: {
                     keywords: null
                 },
+                saleProductsList: [],
                 showMoveDot: [], // 控制下落的小圆点显示隐藏
                 elX: 0,
                 elY: 0,
@@ -101,9 +103,19 @@
                 imgList: ['https://img.yzcdn.cn/vant/apple-1.jpg', 'https://img.yzcdn.cn/vant/apple-2.jpg', 'https://img.yzcdn.cn/vant/apple-3.jpg']
             }
         },
+        mounted() {
+          this.loadOnSaleGoods()
+        },
         methods: {
+            loadOnSaleGoods() {
+                productService.getOnSaleGoods().then((res) => {
+                    if (res.data.data) {
+                        this.saleProductsList = res.data.data
+                    }
+                })
+            },
             addToCart (product, e) {
-                this.dropImg = product
+                this.dropImg = product.photoUrl
                 this.showMoveDot = [...this.showMoveDot, true];
                 this.elX = e.target.getBoundingClientRect().left;
                 this.elY = e.target.getBoundingClientRect().top;
@@ -229,6 +241,9 @@
         font-size: 16px;
     }
     .on-sale-area {
+        .price-txt {
+            width: 60px;
+        }
         .description {
             font-size: 14px;
             color: #33333d;

@@ -1,6 +1,6 @@
 <template>
     <div class="settings-container">
-        settings
+        mine
     </div>
 </template>
 
